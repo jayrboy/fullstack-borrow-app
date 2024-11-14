@@ -1,51 +1,61 @@
 import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SOME_KEY}/api/users`)
-      .then((res) => res.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.log('Error to fetch users: ' + error));
+    setTimeout(() => {
+      // Set timeout of 3 seconds
+      fetch(`${import.meta.env.VITE_API}/api/users`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setUsers(data.data);
+        })
+        .catch((error) => console.log('Error to fetch users: ' + error))
+        .finally(() => setLoading(false)); // Set loading to false when data is fetched
+    }, 3000); // 3 second delay to simulate loading time
   }, []);
-
-  console.log(users);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      {users.map((u, index) => (
-        <>
-          <h4>{u.name}</h4>
-          <button>ยืมเงิน</button>
-          &nbsp;
-          <button>คืนเงิน</button>
-        </>
-      ))}
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* Navigation bar */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <button className="nav-button">หน้าแรก</button>
+          <button className="nav-button">หนี้สินทั้งหมด</button>
+          <button className="nav-button">Login</button>
+        </div>
+      </nav>
+
+      {/* Main content */}
+      <h1>Node.js | React | Docker | AWS</h1>
+      <br />
+
+      {/* Show Loading Spinner */}
+      <h1>Home Page</h1>
+      {loading ? (
+        <div className="loading-spinner" style={{ textAlign: 'center' }}>
+          <p>กำลังโหลด...</p>
+        </div>
+      ) : (
+        <div className="card">
+          {users.map((u) => (
+            <div key={u._id} className="user-card">
+              <h4>Username: {u.name}</h4>
+              <button className="action-button">Borrow Money</button>
+              &nbsp;
+              <button className="action-button">Return Money</button>
+              &nbsp;
+              <button className="action-button">
+                ประวัติการยืม/การคืนเงิน
+              </button>
+              <hr />
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
