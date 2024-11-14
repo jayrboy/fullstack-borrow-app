@@ -282,3 +282,22 @@ router.post('/register', register);
  */
 router.post('/login', login);
 ```
+
+## Upload - Docker Hub
+
+- create a repository name "nodejs-borrow-app"
+- "jayjakkrit/nodejs-borrow-app"
+
+```sh
+docker build -t jayrjakkrit/nodejs-borrow-app:0.1 .
+docker run -d -p 8080:8080 --name nodejs-borrow-app jayrjakkrit/nodejs-borrow-app:0.1
+
+docker push jayrjakkrit/nodejs-borrow-app:0.1
+```
+
+## Download - Docker Hub
+
+```sh
+docker pull jayrjakkrit/nodejs-borrow-app:0.1
+docker run -d -p 8080:8080 --name nodejs-borrow-app jayrjakkrit/nodejs-borrow-app:0.1
+```

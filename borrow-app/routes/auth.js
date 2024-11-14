@@ -33,7 +33,6 @@ router.post('/token', generateToken);
  *   post:
  *     tags: [Authorization]
  *     summary: "Register a new user"
- *     description: "This endpoint registers a new user by providing a username, password, and name. If the username already exists, it returns an error."
  *     requestBody:
  *       required: true
  *       content:
@@ -68,7 +67,7 @@ router.post('/token', generateToken);
  *                   type: string
  *                   example: "Register Successfully"
  *       400:
- *         description: "User already exists"
+ *         description: "Bad Request - Missing required fields or User already exists"
  *         content:
  *           application/json:
  *             schema:
@@ -79,7 +78,7 @@ router.post('/token', generateToken);
  *                   example: 400
  *                 message:
  *                   type: string
- *                   example: "User Already Exists!"
+ *                   example: "Please provide all required fields: username, password, and name."
  *       500:
  *         description: "Unexpected server error"
  *         content:
@@ -94,6 +93,7 @@ router.post('/token', generateToken);
  *                   type: string
  *                   example: "Unexpected server error"
  */
+
 router.post('/register', register);
 
 /**

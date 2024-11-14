@@ -83,7 +83,6 @@ router.get('/users', getUsers);
  *     security:
  *       - bearerAuth: []
  *     summary: Add money to a user's account
- *     description: This endpoint allows you to add money to a specified user's account and record the transaction.
  *     requestBody:
  *       required: true
  *       content:
@@ -119,9 +118,10 @@ router.get('/users', getUsers);
  *                   example: "Success"
  *                 data:
  *                   type: number
+ *                   description: Updated user balance
  *                   example: 200
  *       400:
- *         description: Transaction type not found
+ *         description: Bad Request - Validation error (missing or invalid fields) or Transaction type not found
  *         content:
  *           application/json:
  *             schema:
@@ -132,7 +132,7 @@ router.get('/users', getUsers);
  *                   example: 400
  *                 message:
  *                   type: string
- *                   example: "Transaction type not found"
+ *                   example: "Please provide all required fields: _id, money, and update_by."
  *       404:
  *         description: User not found
  *         content:
@@ -171,8 +171,10 @@ router.post('/add/money', auth, addMoney);
  *   post:
  *     tags:
  *       - Transactions
- *     summary: Borrow money from one user to another
- *     description: This endpoint allows a user to borrow money and records the transaction.
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Borrow money from a user's account
+ *     description: Deducts money from the specified user's account as a loan and records a transaction.
  *     requestBody:
  *       required: true
  *       content:
@@ -182,23 +184,23 @@ router.post('/add/money', auth, addMoney);
  *             properties:
  *               _id:
  *                 type: string
- *                 description: The ID of the user borrowing money
+ *                 description: ID of the user lending the money
  *                 example: "6123456789abcdef01234567"
  *               money:
  *                 type: number
- *                 description: Amount of money to borrow
- *                 example: 100
+ *                 description: Amount to borrow
+ *                 example: 50
  *               update_by:
  *                 type: string
- *                 description: The ID or name of the person processing the update
+ *                 description: Identifier of the person handling the transaction
  *                 example: "admin"
  *               user_id:
  *                 type: string
- *                 description: The ID of the user receiving the money
- *                 example: "6789abcdef01234561234567"
+ *                 description: ID of the user borrowing the money
+ *                 example: "6123456789abcdef01234568"
  *     responses:
  *       200:
- *         description: Money borrowed and transaction recorded successfully
+ *         description: Money deducted from lender and added to borrower's account successfully
  *         content:
  *           application/json:
  *             schema:
@@ -212,9 +214,23 @@ router.post('/add/money', auth, addMoney);
  *                   example: "Success"
  *                 money:
  *                   type: number
- *                   example: 300
+ *                   description: Updated borrower balance
+ *                   example: 150
+ *       400:
+ *         description: Bad Request - Validation error or transaction type not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "Please provide all required fields: _id, money, update_by, and user_id."
  *       404:
- *         description: User or user to update not found
+ *         description: User not found
  *         content:
  *           application/json:
  *             schema:
@@ -226,19 +242,6 @@ router.post('/add/money', auth, addMoney);
  *                 message:
  *                   type: string
  *                   example: "User not found"
- *       400:
- *         description: Transaction type not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: number
- *                   example: 400
- *                 message:
- *                   type: string
- *                   example: "Transaction type not found"
  *       500:
  *         description: Unexpected server error
  *         content:
@@ -264,8 +267,10 @@ router.post('/add/borrow', auth, addBorrow);
  *   post:
  *     tags:
  *       - Transactions
- *     summary: Process a refund from one user to another
- *     description: This endpoint allows a user to return borrowed money and records the transaction.
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Refund borrowed money to a user's account
+ *     description: Adds money back to the lender’s account as a refund and records a transaction.
  *     requestBody:
  *       required: true
  *       content:
@@ -275,23 +280,23 @@ router.post('/add/borrow', auth, addBorrow);
  *             properties:
  *               _id:
  *                 type: string
- *                 description: The ID of the user returning the money
+ *                 description: ID of the user refunding the money
  *                 example: "6123456789abcdef01234567"
  *               money:
  *                 type: number
- *                 description: Amount of money to refund
- *                 example: 100
+ *                 description: Amount to refund
+ *                 example: 50
  *               update_by:
  *                 type: string
- *                 description: The ID or name of the person processing the update
+ *                 description: Identifier of the person handling the refund
  *                 example: "admin"
  *               user_id:
  *                 type: string
- *                 description: The ID of the user receiving the refund
- *                 example: "6789abcdef01234561234567"
+ *                 description: ID of the user receiving the refund
+ *                 example: "6123456789abcdef01234568"
  *     responses:
  *       200:
- *         description: Money refunded and transaction recorded successfully
+ *         description: Money refunded successfully and transaction recorded
  *         content:
  *           application/json:
  *             schema:
@@ -302,12 +307,26 @@ router.post('/add/borrow', auth, addBorrow);
  *                   example: 200
  *                 message:
  *                   type: string
- *                   example: "Refund processed and transaction recorded successfully"
+ *                   example: "Success"
  *                 data:
  *                   type: number
- *                   example: 300
+ *                   description: Updated lender balance
+ *                   example: 200
+ *       400:
+ *         description: Bad Request - Validation error or transaction type not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "Please provide all required fields: _id, money, update_by, and user_id."
  *       404:
- *         description: User or user to update not found
+ *         description: User not found
  *         content:
  *           application/json:
  *             schema:
@@ -319,19 +338,6 @@ router.post('/add/borrow', auth, addBorrow);
  *                 message:
  *                   type: string
  *                   example: "User not found"
- *       400:
- *         description: Transaction type not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: number
- *                   example: 400
- *                 message:
- *                   type: string
- *                   example: "Transaction type not found"
  *       500:
  *         description: Unexpected server error
  *         content:

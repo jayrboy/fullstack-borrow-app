@@ -24,7 +24,17 @@ export const generateToken = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    let { username, password, name } = req.body;
+    const { username, password, name } = req.body;
+
+    // Check for missing fields
+    if (!username || !password || !name) {
+      return res.status(400).json({
+        status: 400,
+        message:
+          'Please provide all required fields: username, password, and name.',
+      });
+    }
+
     let user = await User.findOne({ username });
 
     if (user) {
@@ -32,7 +42,7 @@ export const register = async (req, res) => {
         .status(400)
         .json({ status: 400, message: 'User Already Exists!' });
     } else {
-      // encrypt
+      // encrypt password
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
 
@@ -46,6 +56,7 @@ export const register = async (req, res) => {
       res.status(201).json({ status: 201, message: 'Register Successfully' });
     }
   } catch (error) {
+    // Catch unexpected errors and return them
     res.status(500).json({
       status: 500,
       message: 'Unexpected server error',

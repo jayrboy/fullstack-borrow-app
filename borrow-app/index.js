@@ -22,7 +22,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.SERVER_URL || 'http://localhost:8080',
+        url: 'http://localhost:8080',
       },
     ],
     components: {
@@ -62,6 +62,6 @@ for (const file of files) {
   app.use('/api', fs.default);
 }
 
-app.listen(port, '0.0.0.0', () =>
+app.listen(port, () =>
   console.log('Server running at http://localhost:%s', port)
 );
