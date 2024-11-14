@@ -54,15 +54,32 @@ const router = express.Router();
  *                       items:
  *                         type: object
  *                         properties:
- *                           transaction_id:
+ *                           _id:
  *                             type: string
- *                             example: "61e6c68bcf1a4c2a4a8c89b7"
- *                           money:
- *                             type: number
- *                             example: 50
+ *                             example: "673679aeda22715692979d73"
+ *                           user_id:
+ *                             type: string
+ *                             example: "67364b275e360a14e8a83a6d"
  *                           status:
  *                             type: string
- *                             example: "borrow"
+ *                             example: "ยืมเงิน"
+ *                           money:
+ *                             type: number
+ *                             example: 200
+ *                           borrow_by:
+ *                             type: string
+ *                             example: "user123"
+ *                           refund_by:
+ *                             type: string
+ *                             example: "user456"
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2024-11-14T22:29:02.423Z"
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2024-11-14T22:29:02.423Z"
  *       404:
  *         description: User or transactions not found
  *         content:
@@ -75,7 +92,7 @@ const router = express.Router();
  *                   example: 404
  *                 message:
  *                   type: string
- *                   example: User not found
+ *                   example: "User not found"
  *       500:
  *         description: Error fetching transaction summary
  *         content:
@@ -88,12 +105,12 @@ const router = express.Router();
  *                   example: 500
  *                 message:
  *                   type: string
- *                   example: Error fetching transaction summary
+ *                   example: "Error fetching transaction summary"
  *                 error:
  *                   type: string
  *                   example: "Unexpected server error"
  */
-router.get('/debt-report/:id', auth, getTransactionSummary);
+router.get('/debt-report/:id', getTransactionSummary);
 
 /**
  * @swagger

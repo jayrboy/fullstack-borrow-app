@@ -4,21 +4,30 @@ export const getTransactionSummary = async (req, res) => {
   try {
     const { id } = req.params; // รับ user_id จาก URL params
 
-    // ค้นหาธุรกรรมทั้งหมดที่เกี่ยวข้องกับ user_id นี้
     const transactions = await Transaction.find({ user_id: id }).exec();
 
-    if (!transactions || transactions.length === 0) {
+    if (!transactions) {
       return res.status(404).json({
         status: 404,
         message: 'No transactions found for this user',
       });
     }
 
-    // คำนวณยอดหนี้ทั้งหมดที่ผู้ใช้ต้องจ่าย
-    const totalDebt = transactions.reduce(
-      (total, transaction) => total + transaction.money,
-      0
-    );
+    // ตัวแปรสำหรับเก็บยอดรวมของ ยืมเงิน และ คืนเงิน
+    let totalBorrow = 0;
+    let totalRefund = 0;
+
+    // ใช้ for...of เพื่อวนลูปผ่าน transactions
+    for (let t of transactions) {
+      if (t.status === 'ยืมเงิน') {
+        totalBorrow += t.money; // รวมยอดยืมเงิน
+      } else if (t.status === 'คืนเงิน') {
+        totalRefund += t.money; // รวมยอดคืนเงิน
+      }
+    }
+
+    // คำนวณยอดหนี้ทั้งหมด (ยืมเงิน - คืนเงิน)
+    const totalDebt = totalBorrow - totalRefund;
 
     // ดึงข้อมูลยอดเงินปัจจุบันของผู้ใช้
     const user = await User.findById(id);
