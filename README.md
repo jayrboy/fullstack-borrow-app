@@ -33,6 +33,8 @@ COPY . .
 
 RUN npm run build
 
+EXPOSE 3000
+
 CMD [ "npx", "serve", "dist" ]
 ```
 
@@ -42,40 +44,33 @@ CMD [ "npx", "serve", "dist" ]
 
 ```yml
 services:
-  mongo:
-    image: mongo:latest
-    restart: always
-    ports:
-      - '27017:27017'
-    networks:
-      - my-network
-    environment:
-      MONGO_INITDB_DATABASE: db1
-
   api:
-    build: ./borrow-app/
+    build: ./borrow-app/ # ตำแหน่งของ Dockerfile
     ports:
       - '8080:8080'
-    depends_on:
-      - db
     environment:
+      NODE_ENV: development
+      SERVER_URL: localhost
+      # SERVER_URL: 47.129.56.185
       PORT: 8080
-      MONGODB_URL: mongodb://mongo:27017/db1 # เปลี่ยน localhost เป็นชื่อ service "mongo"
+      MONGODB_URL: mongodb+srv://root:1234@db.9pid9n4.mongodb.net/
+      JWT_SECRET: jwtsecret
     networks:
       - my-network
 
   web:
-    build: ./reactjs-borrowapp/
+    build: ./react-borrow-app/ # ตำแหน่งของ Dockerfile
     ports:
-      - '5173:5173'
+      - '3000:3000'
     environment:
-      VITE_API: http://3.0.102.101:8080
+      VITE_API: http://localhost:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
+      # VITE_API: http://47.129.56.185:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
     networks:
       - my-network
 
 networks:
   my-network:
-    driver: bridge
+    driver: bridge # ใช้ network ประเภท bridge เพื่อให้คอนเทนเนอร์ต่างๆ สื่อสารกันได้ใน network เดียวกัน
 ```
 
 ## Run Docker Compose
@@ -97,4 +92,7 @@ $ docker ps
 
 $ docker compose down
 $ docker compose up -d
+
+$ docker images
+$ docker rmi -f <image-id>
 ```

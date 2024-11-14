@@ -5,8 +5,8 @@ services:
       - '8080:8080'
     environment:
       NODE_ENV: development
-      SERVER_URL: localhost
-      # SERVER_URL: 47.129.56.185
+      # SERVER_URL: localhost
+      SERVER_URL: 47.129.56.185
       PORT: 8080
       MONGODB_URL: mongodb+srv://root:1234@db.9pid9n4.mongodb.net/
       JWT_SECRET: jwtsecret
@@ -18,8 +18,8 @@ services:
     ports:
       - '3000:3000'
     environment:
-      VITE_API: http://localhost:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
-      # VITE_API: http://47.129.56.185:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
+      # VITE_API: http://localhost:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
+      VITE_API: http://47.129.56.185:8080 # URL ของ API สำหรับให้ front-end ติดต่อ (ควรใช้ IP หรือ domain จริงเมื่อ deploy)
     networks:
       - my-network
 
