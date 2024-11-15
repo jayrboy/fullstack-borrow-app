@@ -4,9 +4,7 @@ services:
     ports:
       - '8080:8080'
     environment:
-      NODE_ENV: development
-      # SERVER_URL: localhost
-      SERVER_URL: 47.129.56.185
+      NODE_ENV: production
       PORT: 8080
       MONGODB_URL: mongodb+srv://root:1234@db.9pid9n4.mongodb.net/
       JWT_SECRET: jwtsecret

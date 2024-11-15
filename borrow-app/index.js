@@ -62,6 +62,6 @@ for (const file of files) {
   app.use('/api', fs.default);
 }
 
-app.listen(port, () =>
+app.listen(port, '0.0.0.0', () =>
   console.log('Server running at http://localhost:%s', port)
 );
