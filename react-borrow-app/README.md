@@ -36,5 +36,5 @@ docker push jayrjakkrit/reactjs-borrow-app:0.1
 
 ```sh
 docker pull jayrjakkrit/reactjs-borrow-app:0.1
-docker run -d -p 3000:3000 --name reactjs-borrow-app jayrjakkrit/reactjs-borrow-app:0.1
+docker run -d -p 80:3000 --name reactjs-borrow-app jayrjakkrit/reactjs-borrow-app:0.1
 ```
