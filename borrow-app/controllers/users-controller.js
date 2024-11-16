@@ -206,7 +206,7 @@ export const addRefund = async (req, res) => {
     const transaction = new Transaction({
       user_id: user_id,
       status: transactionType.type_name,
-      borrow_by: user.name,
+      refund_by: user.name,
       money,
       update_by,
     });
