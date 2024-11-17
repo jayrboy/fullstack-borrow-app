@@ -171,6 +171,6 @@ router.get('/debt-report/:id', getTransactionSummary);
  *                   type: string
  *                   example: "Error fetching transaction summary"
  */
-router.get('/transactions', auth, getTransactions);
+router.get('/transactions', getTransactions);
 
 export default router;
