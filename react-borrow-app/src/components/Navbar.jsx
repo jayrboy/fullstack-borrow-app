@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import reactLogo from '../src/assets/react.svg';
+import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
 
 const Navbar = () => {
@@ -16,7 +16,13 @@ const Navbar = () => {
       </span>
       <div className="navbar-container">
         <button className="nav-button" onClick={() => navigate('/')}>
-          หน้าแรก
+          Home
+        </button>
+        <button
+          className="nav-button"
+          onClick={() => navigate('/transactions')}
+        >
+          Transactions
         </button>
       </div>
     </nav>

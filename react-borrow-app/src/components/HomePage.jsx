@@ -20,7 +20,7 @@ const HomePage = () => {
   return (
     <>
       {/* Show Loading Spinner */}
-      <h1>Home Page</h1>
+      <h1>Home Page - หน้าแรก</h1>
       {loading ? (
         <div className="loading-spinner" style={{ textAlign: 'center' }}>
           <p>กำลังโหลด...</p>
@@ -30,14 +30,17 @@ const HomePage = () => {
           {users.map((u) => (
             <div key={u._id} className="user-card">
               <h4>ผู้ใช้: {u.name}</h4>
-              <p>ยอดเงินปัจจุบัน: {u.money} บาท</p>
+              <p>
+                ยอดเงินปัจจุบัน:{' '}
+                {u.money.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+                บาท
+              </p>
               <button
                 className="action-button"
                 onClick={() => navigate(`/debt-report/${u._id}`)}
               >
-                ประวัติการยืม/การคืนเงิน
+                สรุปการติดหนี้สิ้น
               </button>
-              <hr />
             </div>
           ))}
         </div>

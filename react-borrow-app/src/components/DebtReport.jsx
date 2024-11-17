@@ -19,7 +19,7 @@ const DebtReport = () => {
 
   return (
     <>
-      <h1>Debt Report Page</h1>
+      <h1>สรุปการติดหนี้สิ้น</h1>
       {loading ? (
         <div className="loading-spinner" style={{ textAlign: 'center' }}>
           <p>กำลังโหลด...</p>
